@@ -1,0 +1,35 @@
+h1 {
+  color: blueviolet;
+}
+
+table,
+th {
+  border: 1px rebeccapurple solid;
+}
+
+caption {
+  font-size: 20px;
+  padding: 10px;
+  border: 1px rebeccapurple solid;
+}
+
+th,
+td {
+  padding: 10px;
+}
+
+body {
+  /* font grows 1px for every 100px of viewport width */
+  font-size: calc(16px + 1vw);
+  /* leading grows along with font, */
+  /* with an additional 0.1em + 0.5px per 100px of the viewport */
+  line-height: calc(1.1em + 0.5vw);
+}
+
+/* to constrain the top-end for rapid-growth headings */
+
+@media (min-width: 50em) {
+  h1 {
+    font-size: 50px;
+  }
+}
