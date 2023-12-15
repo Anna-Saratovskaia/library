@@ -1,0 +1,25 @@
+// const newTr = document.createElement("tr");
+  // const tdAuthor = document.createElement("td");
+  // const tdTitle = document.createElement("td");
+  // const tdYear = document.createElement("td");
+
+  // const tdStatus = document.createElement("td");
+  // const statusBtn = document.createElement("button");
+  // const tdRemove = document.createElement("td");
+  // const removeBtn = document.createElement("button");
+  // statusBtn.appendChild(document.createTextNode("Read"));
+  // removeBtn.textContent = "Remove";
+
+
+  // Book.prototype.toggleStatus = function (statusBtn) {
+//   if (statusBtn.textContent === "Read") {
+//     statusBtn.textContent = "Haven't read yet";
+//   } else if (statusBtn.textContent === "Haven't read yet") {
+//     statusBtn.textContent = "Read";
+//   }
+// };
+
+
+// const removeBook = function (index) {
+//   splice;
+// };

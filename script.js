@@ -1,67 +1,126 @@
 const myLibrary = [];
 
-function Book(title, author, year, status) {
+
+function Book(title, author, year) {
   this.title = title;
   this.author = author;
   this.year = year;
   this.status = status;
 }
 
-function addBookToLibrary(newBook) {
+const addBookToLibrary = function (newBook) {
   myLibrary.push(newBook);
   return myLibrary;
-}
+};
 
-let newBook1 = new Book("1984", "George Orwell", 1949, "Read");
 
-let newBook2 = new Book("Demons", "Fyodor Dostoevsky", 1872, "Read");
+let newTr = `<tr>
+<th>${title}</th>
+<th>${author}</th>
+<th>${year}</th>
+<th><button>${bookStatus}</button></th>
+<th><button>Remove</button></th>
+</tr>`;
 
-addBookToLibrary(newBook1);
-addBookToLibrary(newBook2);
+
+function removeBook() {}
 
 const tbody = document.querySelector("tbody");
 
 function displayBook(myLibrary) {
   
-  for (let i = 0; i < myLibrary.length; i++) {
-    const newTr = document.createElement("tr");
-    const tdAuthor = document.createElement("td");
-    const tdTitle = document.createElement("td");
-    const tdYear = document.createElement("td");
-    const tdStatus = document.createElement("td");
-    const removeBtn = document.createElement('button');
-    const changeStatus = document.createElement('button')
-    tbody.appendChild(newTr);
-    tdAuthor.textContent = myLibrary[i].author;
-    tdTitle.textContent = myLibrary[i].title;
-    tdYear.textContent = myLibrary[i].year;
-    tdStatus.textContent = myLibrary[i].status;
-    newTr.appendChild(tdTitle);
-    newTr.appendChild(tdAuthor);
-    newTr.appendChild(tdYear);
-    newTr.appendChild(tdStatus);
-    newTr.appendChild(removeBtn);
-    newTr.appendChild(changeStatus);
-  }
+  document.tbody.innerHTML(newTr);
+  tdAuthor.textContent = myLibrary[myLibrary.length - 1].author;
+  tdTitle.textContent = myLibrary[myLibrary.length - 1].title;
+  tdYear.textContent = myLibrary[myLibrary.length - 1].year;
+  tdStatus.textContent = myLibrary[myLibrary.length - 1].status;
+  newTr.appendChild(tdTitle);
+  newTr.appendChild(tdAuthor);
+  newTr.appendChild(tdYear);
+  newTr.appendChild(tdStatus);
+  tdStatus.appendChild(statusBtn);
+  newTr.appendChild(tdRemove);
+  tdRemove.appendChild(removeBtn);
+
+  removeBtn.addEventListener("click", function (e) {
+    e.preventDefault();
+
+    newTr.removeChild(tdTitle);
+    newTr.removeChild(tdAuthor);
+    newTr.removeChild(tdYear);
+    newTr.removeChild(tdStatus);
+    tdStatus.removeChild(statusBtn);
+    newTr.removeChild(tdRemove);
+    tdRemove.removeChild(removeBtn);
+  });
+
+  statusBtn.addEventListener("click", function (e, statusBtn) {
+    e.preventDefault();
+    myLibrary[myLibrary.length - 1].toggleStatus();
+  });
 }
 
- const dialog = document.querySelector('dialog');
- const newBookBtn = document.querySelector('.new-book');
- const addBtn = document.querySelector('.add')
+const dialog = document.querySelector("dialog");
+const newBookBtn = document.querySelector(".new-book");
+const addNewBookBtn = document.querySelector(".add");
 
- newBookBtn.addEventListener('click', function() {
-  dialog.showModal()
- })
+newBookBtn.addEventListener("click", function () {
+  dialog.showModal();
+});
 
- addBtn.addEventListener("click", function(e){
+addNewBookBtn.addEventListener("click", function (e) {
   e.preventDefault();
   dialog.close();
   let title = document.querySelector('[name="title"]');
-  let author = document.querySelector('[name="author"]')
-  let year = document.querySelector('[name="year"]')
-  let status = document.querySelector('[name="status"]')
+  let author = document.querySelector('[name="author"]');
+  let year = document.querySelector('[name="year"]');
 
-  let newBook = new Book(title.value, author.value, year.value, status.value );
-  addBookToLibrary(newBook)
-  displayBook(myLibrary)
- })
+  let newBook = new Book(title.value, author.value, year.value);
+
+  addBookToLibrary(newBook);
+  displayBook(myLibrary);
+
+  title.value = "";
+  author.value = "";
+  year.value = "";
+});
+
+//two pointers technic
+// function theirMoveZero (nums) {
+//   let left = 0;
+//   let right = 0;
+
+//   while(right < nums.length) {
+//     if(nums[right] !== 0){
+//       [nums[left], nums[right]] = [nums[right], nums[left]];
+//       left++
+//     }
+//     right++
+//   }
+//   return nums;
+// }
+
+
+// function addingShifted(arrayOfArrays, shift) {
+//   let result = [];
+//   for (let i = 0; i < arrayOfArrays.length; i++) {
+//     for (let j = 0; j < arrayOfArrays[i].length - shift; j++) {
+//       let elem = arrayOfArrays[i][j + shift] + arrayOfArrays[i + 1][j];
+
+//       console.log(elem);
+//       result.push(elem);
+//     }
+//   }
+//   return result;
+// }
+
+// console.log(
+
+//   addingShifted(
+//     [
+//       [1, 2, 3, 4, 5, 6],
+//       [7, 7, 7, 7, 7, 7],
+//     ],
+//     3
+//   )
+// );

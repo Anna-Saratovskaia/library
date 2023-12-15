@@ -63,7 +63,7 @@ form {
   column-gap: 20px;
 }
 
-.inputs-container div{
+.inputs-container div {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
@@ -75,4 +75,11 @@ form {
   background-color: rgb(195, 147, 240);
   height: 50px;
   border-radius: 5px;
+}
+
+.read {
+  content: "Read";
+}
+.not-read {
+  content: "Haven't read yet"
 }
