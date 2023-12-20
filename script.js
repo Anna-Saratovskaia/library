@@ -1,7 +1,6 @@
 const myLibrary = [];
 
-
-function Book(title, author, year) {
+function Book(title, author, year, status) {
   this.title = title;
   this.author = author;
   this.year = year;
@@ -13,50 +12,47 @@ const addBookToLibrary = function (newBook) {
   return myLibrary;
 };
 
-
-let newTr = `<tr>
-<th>${title}</th>
-<th>${author}</th>
-<th>${year}</th>
-<th><button>${bookStatus}</button></th>
-<th><button>Remove</button></th>
-</tr>`;
-
-
-function removeBook() {}
+function removeBook(index) {
+  return myLibrary.splice(index, 1);
+}
 
 const tbody = document.querySelector("tbody");
 
-function displayBook(myLibrary) {
-  
-  document.tbody.innerHTML(newTr);
-  tdAuthor.textContent = myLibrary[myLibrary.length - 1].author;
-  tdTitle.textContent = myLibrary[myLibrary.length - 1].title;
-  tdYear.textContent = myLibrary[myLibrary.length - 1].year;
-  tdStatus.textContent = myLibrary[myLibrary.length - 1].status;
-  newTr.appendChild(tdTitle);
-  newTr.appendChild(tdAuthor);
-  newTr.appendChild(tdYear);
-  newTr.appendChild(tdStatus);
-  tdStatus.appendChild(statusBtn);
-  newTr.appendChild(tdRemove);
-  tdRemove.appendChild(removeBtn);
+let redraw = function () {
+  tbody.innerHTML = "";
+  for (let [i, book] of myLibrary.entries()) displayBook(i);
+};
+
+let creation = document.createElement("tbody");
+
+function displayBook(index) {
+  let { author, title, year, status } = myLibrary[index];
+  let newTr = `<tr data-index=${index}>
+  <th>${title}</th>
+  <th>${author}</th>
+  <th>${year}</th>
+  <th><button type="button" class="change-status-${index}">${
+    status ? "Read" : "Unread"
+  }</button></th>
+  <th><button type="button" class="remove-${index}">Remove</button></th>
+  </tr>`;
+
+  creation.innerHTML = newTr;
+  tbody.appendChild(creation.firstChild);
+
+  let removeBtn = document.querySelector(`.remove-${index}`);
 
   removeBtn.addEventListener("click", function (e) {
-    e.preventDefault();
-
-    newTr.removeChild(tdTitle);
-    newTr.removeChild(tdAuthor);
-    newTr.removeChild(tdYear);
-    newTr.removeChild(tdStatus);
-    tdStatus.removeChild(statusBtn);
-    newTr.removeChild(tdRemove);
-    tdRemove.removeChild(removeBtn);
+    removeBook(index); // сохраняться closure from diplayBook
+    // обновить список книг через новую отрисовку dislayBook
+    redraw();
   });
 
-  statusBtn.addEventListener("click", function (e, statusBtn) {
-    e.preventDefault();
-    myLibrary[myLibrary.length - 1].toggleStatus();
+  let changeStatus = document.querySelector(`.change-status-${index}`);
+
+  changeStatus.addEventListener("click", function (e) {
+    myLibrary[index].status = !myLibrary[index].status;
+    redraw();
   });
 }
 
@@ -74,11 +70,20 @@ addNewBookBtn.addEventListener("click", function (e) {
   let title = document.querySelector('[name="title"]');
   let author = document.querySelector('[name="author"]');
   let year = document.querySelector('[name="year"]');
+  let status = document.querySelector('[name="status"]');
 
-  let newBook = new Book(title.value, author.value, year.value);
+  let newBook = new Book(
+    title.value,
+    author.value,
+    year.value,
+    !!status.checked
+  );
 
   addBookToLibrary(newBook);
-  displayBook(myLibrary);
+
+  displayBook(myLibrary.length - 1);
+  // или можно for (let i = 0; i < myLibrary.length; i++) displayBook(i)
+  // если хочется все нарисовать - это думала так.
 
   title.value = "";
   author.value = "";
@@ -99,7 +104,6 @@ addNewBookBtn.addEventListener("click", function (e) {
 //   }
 //   return nums;
 // }
-
 
 // function addingShifted(arrayOfArrays, shift) {
 //   let result = [];
