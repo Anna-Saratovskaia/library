@@ -1,4 +1,6 @@
 const myLibrary = [];
+const tbody = document.querySelector("tbody");
+let creation = document.createElement("tbody");
 
 function Book(title, author, year, status) {
   this.title = title;
@@ -12,49 +14,51 @@ const addBookToLibrary = function (newBook) {
   return myLibrary;
 };
 
-function removeBook(index) {
+const removeBook = function (index) {
   return myLibrary.splice(index, 1);
-}
+};
 
-const tbody = document.querySelector("tbody");
-
-let redraw = function () {
+const redraw = function () {
   tbody.innerHTML = "";
   for (let [i, book] of myLibrary.entries()) displayBook(i);
 };
 
-let creation = document.createElement("tbody");
+tbody.addEventListener("click", function (e) {
+  let index;
+  let currentElem = e.target;
+  while (currentElem.parentNode) {
+    currentElem = currentElem.parentNode;
+    if (currentElem.tagName === "TR") {
+      index = +currentElem.dataset.index;
+      break;
+    }
+  };
+  
+  if (e.target.classList.contains(`remove`)) {
+    console.log(index);
+    removeBook(index);
+    redraw();
+  } else if (e.target.classList.contains("status")) {
+    myLibrary[index].status = !myLibrary[index].status;
+    redraw();
+  }
+});
 
-function displayBook(index) {
+const displayBook = function (index) {
   let { author, title, year, status } = myLibrary[index];
-  let newTr = `<tr data-index=${index}>
+  let newTr = `<tr data-index="${index}">
   <th>${title}</th>
   <th>${author}</th>
   <th>${year}</th>
-  <th><button type="button" class="change-status-${index}">${
+  <th><button type="button" class="status">${
     status ? "Read" : "Unread"
   }</button></th>
-  <th><button type="button" class="remove-${index}">Remove</button></th>
+  <th><button type="button" class="remove">Remove</button></th>
   </tr>`;
 
   creation.innerHTML = newTr;
   tbody.appendChild(creation.firstChild);
-
-  let removeBtn = document.querySelector(`.remove-${index}`);
-
-  removeBtn.addEventListener("click", function (e) {
-    removeBook(index); // сохраняться closure from diplayBook
-    // обновить список книг через новую отрисовку dislayBook
-    redraw();
-  });
-
-  let changeStatus = document.querySelector(`.change-status-${index}`);
-
-  changeStatus.addEventListener("click", function (e) {
-    myLibrary[index].status = !myLibrary[index].status;
-    redraw();
-  });
-}
+};
 
 const dialog = document.querySelector("dialog");
 const newBookBtn = document.querySelector(".new-book");
@@ -82,49 +86,9 @@ addNewBookBtn.addEventListener("click", function (e) {
   addBookToLibrary(newBook);
 
   displayBook(myLibrary.length - 1);
-  // или можно for (let i = 0; i < myLibrary.length; i++) displayBook(i)
-  // если хочется все нарисовать - это думала так.
 
   title.value = "";
   author.value = "";
   year.value = "";
 });
 
-//two pointers technic
-// function theirMoveZero (nums) {
-//   let left = 0;
-//   let right = 0;
-
-//   while(right < nums.length) {
-//     if(nums[right] !== 0){
-//       [nums[left], nums[right]] = [nums[right], nums[left]];
-//       left++
-//     }
-//     right++
-//   }
-//   return nums;
-// }
-
-// function addingShifted(arrayOfArrays, shift) {
-//   let result = [];
-//   for (let i = 0; i < arrayOfArrays.length; i++) {
-//     for (let j = 0; j < arrayOfArrays[i].length - shift; j++) {
-//       let elem = arrayOfArrays[i][j + shift] + arrayOfArrays[i + 1][j];
-
-//       console.log(elem);
-//       result.push(elem);
-//     }
-//   }
-//   return result;
-// }
-
-// console.log(
-
-//   addingShifted(
-//     [
-//       [1, 2, 3, 4, 5, 6],
-//       [7, 7, 7, 7, 7, 7],
-//     ],
-//     3
-//   )
-// );
